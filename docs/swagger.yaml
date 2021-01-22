@@ -1,0 +1,41 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Desafio Link Api
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: gprando55@gmail.com
+servers:
+  - url: http://localhost:3333
+paths:
+  /:
+   
+tags:
+  - name: default
+    description: default
+  
+
+components:
+  parameters:
+    default:
+      required: true
+      description: default 
+      name: default
+      in: path
+      schema:
+        type: string
+
+  schemas:
+    default:
+      type: object
+      required:
+        - id
+      properties:
+        default:
+          type: string
+          
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
