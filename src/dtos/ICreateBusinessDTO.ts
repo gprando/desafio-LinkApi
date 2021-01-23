@@ -7,7 +7,7 @@ export default interface ICreateBusinessDTO {
   client_email: string;
   client_phone: string;
   title: string;
-  add_time: Date;
+  add_time: string;
   value: number;
   currency: string;
   status: string;
