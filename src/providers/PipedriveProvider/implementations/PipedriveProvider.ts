@@ -31,7 +31,8 @@ export default class PipedriveProvider implements IPipedriveProvider {
 
     const filteredDeals = data.filter(
       (deal: IPipedriveDTO) =>
-        deal.status === 'won' && !dealsInDatabase.find(d => d.code === deal.id),
+        deal.status === 'won' &&
+        !dealsInDatabase.find(d => d && d.code === deal.id),
     ) as IPipedriveDTO[];
 
     return filteredDeals;

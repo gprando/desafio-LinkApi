@@ -6,34 +6,224 @@ info:
   contact:
     email: gprando55@gmail.com
 servers:
-  - url: http://localhost:3333
+  - url: http://localhost:3000
 paths:
-  /:
-   
+  /business/integration:
+    post:
+      summary: integration route
+      description: route that lists all pipedrive deals, filters out those with status equal to earnings, adds to the bank and bling
+      tags:
+        - business
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sucess'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /business/{id}:
+    get:
+      summary: list business data
+      description: list business data
+      tags:
+        - business
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/business'
+        400:
+          description: object id inválid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /business:
+    get:
+      summary: list all business paginated
+      tags:
+        - business
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: page
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+          description: records per page
+      responses:
+        200:
+          description: Sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/paginated'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
 tags:
-  - name: default
-    description: default
-  
+  - name: business
+    description: business routes
+
 
 components:
   parameters:
-    default:
+    id:
       required: true
-      description: default 
-      name: default
+      description: 'business id'
+      name: id
       in: path
       schema:
         type: string
 
   schemas:
-    default:
+    sucess:
       type: object
       required:
-        - id
+        - status
+        - message
       properties:
-        default:
+        status:
           type: string
-          
+        message:
+          type: string
+
+    NotFound:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    InternalServerError:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+    business:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        id:
+          type: string
+        code:
+          type: number
+        creator_user_id:
+          type: string
+        creator_name:
+          type: string
+        creator_email:
+          type: string
+        client_name:
+          type: string
+        client_email:
+          type: string
+        client_phone:
+          type: string
+        title:
+          type: string
+        add_time:
+          type: string
+        value:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    paginated:
+      type: object
+      required:
+        - totalCount
+        - page
+        - limit
+        - data
+      properties:
+        totalCount:
+          type: number
+        page:
+          type: number
+        limit:
+          type: number
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+              type: string
+              code:
+                type: number
+              creator_user_id:
+                type: string
+              creator_name:
+                type: string
+              creator_email:
+                type: string
+              client_name:
+                type: string
+              client_email:
+                type: string
+              client_phone:
+                type: string
+              title:
+                type: string
+              add_time:
+                type: string
+              value:
+                type: number
+              currency:
+                type: string
+              status:
+                type: string
+              created_at:
+                type: string
+              updated_at:
+                type: string
+
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme
       type: http

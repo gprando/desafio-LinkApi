@@ -9,7 +9,7 @@ export default interface IBusinessRepository {
     limit,
     page,
   }: IPaginationDTO): Promise<IPaginatedBusinessDTO>;
-  findById(id: ObjectID): Promise<Business | undefined>;
+  findById(id: string): Promise<Business | undefined>;
   findByCode(code: number): Promise<Business | undefined>;
   create(data: ICreateBusinessDTO[]): Promise<Business[]>;
 }

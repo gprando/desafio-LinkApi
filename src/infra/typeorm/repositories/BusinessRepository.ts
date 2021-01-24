@@ -2,7 +2,9 @@ import { ICreateBusinessDTO, IPaginatedBusinessDTO } from '@/dtos';
 import IPaginationDTO from '@/dtos/IPaginationDTO';
 import Business from '@/infra/typeorm/entities/Business';
 import IBusinessRepository from '@/repositories/IBusinessRepository';
-import { getMongoRepository, MongoRepository, ObjectID } from 'typeorm';
+import { getMongoRepository, MongoRepository } from 'typeorm';
+import { ObjectID } from 'mongodb';
+import AppError from '@/errors/AppError';
 
 export default class BusinessRepository implements IBusinessRepository {
   private ormRepository: MongoRepository<Business>;
@@ -11,7 +13,11 @@ export default class BusinessRepository implements IBusinessRepository {
     this.ormRepository = getMongoRepository(Business);
   }
 
-  public async findById(id: ObjectID): Promise<Business | undefined> {
+  public async findById(id: string): Promise<Business | undefined> {
+    if (!ObjectID.isValid(id)) {
+      throw new AppError('Object id inválid');
+    }
+
     const business = await this.ormRepository.findOne(id);
 
     return business;

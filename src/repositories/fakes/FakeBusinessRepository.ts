@@ -13,6 +13,12 @@ export default class FakeBusinessRepository implements IBusinessRepository {
     return business;
   }
 
+  public async findByCode(code: number): Promise<Business | undefined> {
+    const business = this.business.find(b => b.code === code);
+
+    return business;
+  }
+
   public async findAll(): Promise<Business[] | undefined> {
     return this.business;
   }
@@ -47,43 +53,33 @@ export default class FakeBusinessRepository implements IBusinessRepository {
     };
   }
 
-  public async create({
-    add_time,
-    client_email,
-    client_name,
-    client_phone,
-    code,
-    creator_email,
-    creator_name,
-    creator_user_id,
-    currency,
-    status,
-    title,
-    value,
-  }: ICreateBusinessDTO): Promise<Business> {
-    const business = new Business();
+  public async create(data: ICreateBusinessDTO[]): Promise<Business[]> {
+    const createdBusiness = data.map(business => {
+      const newBusiness = new Business();
 
-    Object.assign(
-      business,
-      { id: new ObjectID() },
-      {
-        add_time,
-        client_email,
-        client_name,
-        client_phone,
-        code,
-        creator_email,
-        creator_name,
-        creator_user_id,
-        currency,
-        status,
-        title,
-        value,
-      },
-    );
+      Object.assign(
+        newBusiness,
+        { id: new ObjectID() },
+        {
+          add_time: business.add_time,
+          client_email: business.client_email,
+          client_name: business.client_name,
+          client_phone: business.client_phone,
+          code: business.code,
+          creator_email: business.creator_email,
+          creator_name: business.creator_name,
+          creator_user_id: business.creator_user_id,
+          currency: business.currency,
+          status: business.status,
+          title: business.title,
+          value: business.value,
+        },
+      );
 
-    this.business.push(business);
+      this.business.push(newBusiness);
+      return newBusiness;
+    });
 
-    return business;
+    return createdBusiness;
   }
 }

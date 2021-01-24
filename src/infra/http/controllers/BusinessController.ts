@@ -1,11 +1,29 @@
+import AppError from '@/errors/AppError';
 import BusinessRepository from '@/infra/typeorm/repositories/BusinessRepository';
 import BlingProvider from '@/providers/BlingProvider/implementations/BlingProvider';
 import PipedriveProvider from '@/providers/PipedriveProvider/implementations/PipedriveProvider';
 import CreateBusinessService from '@/services/CreateBusinessService';
 import ListAllBusinessService from '@/services/ListAllBusinessService';
+import ListBusinessByIdService from '@/services/ListBusinessByIdService';
 import { Request, Response } from 'express';
 
 class BusinessController {
+  async show(request: Request, response: Response): Promise<Response> {
+    const businessRepository = new BusinessRepository();
+    const listAllBusinessService = new ListBusinessByIdService(
+      businessRepository,
+    );
+    const { id } = request.params;
+
+    if (!id) {
+      throw new AppError('Id is required', 401);
+    }
+
+    const result = await listAllBusinessService.execute(String(id));
+
+    return response.json(result);
+  }
+
   async index(request: Request, response: Response): Promise<Response> {
     const businessRepository = new BusinessRepository();
     const listAllBusinessService = new ListAllBusinessService(
