@@ -1,14 +1,18 @@
 import { ICreateBusinessDTO, IPaginatedBusinessDTO } from '@/dtos';
 import IPaginationDTO from '@/dtos/IPaginationDTO';
+import AppError from '@/errors/AppError';
 import Business from '@/infra/typeorm/entities/Business';
-import { ObjectID } from 'typeorm';
+import { ObjectID } from 'mongodb';
 import IBusinessRepository from '../IBusinessRepository';
 
 export default class FakeBusinessRepository implements IBusinessRepository {
   private business: Business[] = [];
 
-  public async findById(id: ObjectID): Promise<Business | undefined> {
-    const business = this.business.find(b => b.id === id);
+  public async findById(id: string): Promise<Business | undefined> {
+    if (!ObjectID.isValid(id)) {
+      throw new AppError('Object id inválid');
+    }
+    const business = this.business.find(b => String(b.id) === id);
 
     return business;
   }

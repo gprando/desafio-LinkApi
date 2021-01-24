@@ -15,7 +15,7 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
-      "@config/*": ["config/*"],
+      "@config/*": ["config/*"]
     },
 
     "esModuleInterop": true,
