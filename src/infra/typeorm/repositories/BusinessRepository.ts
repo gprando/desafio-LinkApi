@@ -1,6 +1,6 @@
 import { ICreateBusinessDTO, IPaginatedBusinessDTO } from '@/dtos';
 import IPaginationDTO from '@/dtos/IPaginationDTO';
-import Business from '@/infra/typeorm/entities/Business';
+import Business from '@/infra/typeorm/schemas/Business';
 import IBusinessRepository from '@/repositories/IBusinessRepository';
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { ObjectID } from 'mongodb';
@@ -42,7 +42,6 @@ export default class BusinessRepository implements IBusinessRepository {
     const skippedItems = (page - 1) * limit;
 
     const totalCount = await this.ormRepository.count();
-    // const business = await this.ormRepository.find({ skip: skippedItems });
     const business = await this.ormRepository.find({
       skip: skippedItems,
       take: limit,

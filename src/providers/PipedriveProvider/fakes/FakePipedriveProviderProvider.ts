@@ -1,8 +1,9 @@
 import IPipedriveProvider from '../models/IPipedriveProvider';
 import IPipedriveDTO from '../dtos/IPipedriveDTO';
+import IResponsePipedrive from '../dtos/IResponsePipedrive';
 
 export default class FakePipedriveProvider implements IPipedriveProvider {
-  public async listAll(): Promise<IPipedriveDTO[]> {
+  public async listAll(): Promise<IResponsePipedrive> {
     const fakeDeal = {
       id: 1,
       creator_user_id: {
@@ -38,6 +39,6 @@ export default class FakePipedriveProvider implements IPipedriveProvider {
       status: 'won',
     } as IPipedriveDTO;
 
-    return [fakeDeal];
+    return { toSave: [fakeDeal], saved: [] };
   }
 }

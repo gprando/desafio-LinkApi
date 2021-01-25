@@ -1,6 +1,5 @@
-import Business from '@/infra/typeorm/entities/Business';
+import Business from '@/infra/typeorm/schemas/Business';
 import { ICreateBusinessDTO, IPaginatedBusinessDTO } from '@/dtos';
-import { ObjectID } from 'typeorm';
 import IPaginationDTO from '@/dtos/IPaginationDTO';
 
 export default interface IBusinessRepository {

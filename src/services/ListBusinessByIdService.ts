@@ -1,5 +1,5 @@
 import AppError from '@/errors/AppError';
-import Business from '@/infra/typeorm/entities/Business';
+import Business from '@/infra/typeorm/schemas/Business';
 import IBusinessRepository from '@/repositories/IBusinessRepository';
 
 class ListBusinessByIdService {

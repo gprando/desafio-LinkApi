@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { ICreateBusinessDTO } from '@/dtos';
 
 export const createXML = (business: ICreateBusinessDTO): string => {
@@ -22,4 +21,20 @@ export const createXML = (business: ICreateBusinessDTO): string => {
 </root>`;
 
   return xml;
+};
+
+export const sameDay = (day1: Date, day2: Date): boolean => {
+  return (
+    day1.getFullYear() === day2.getFullYear() &&
+    day1.getMonth() === day2.getMonth() &&
+    day1.getDate() === day2.getDate()
+  );
+};
+
+export const formatDate = (date: Date): Date => {
+  return new Date(
+    `${date.getFullYear()}-${
+      date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+    }-${date.getDate()}`,
+  );
 };

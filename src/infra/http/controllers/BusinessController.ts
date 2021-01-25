@@ -1,5 +1,6 @@
 import AppError from '@/errors/AppError';
 import BusinessRepository from '@/infra/typeorm/repositories/BusinessRepository';
+import DailyEarningsRepository from '@/infra/typeorm/repositories/DailyEarningsRepository';
 import BlingProvider from '@/providers/BlingProvider/implementations/BlingProvider';
 import PipedriveProvider from '@/providers/PipedriveProvider/implementations/PipedriveProvider';
 import CreateBusinessService from '@/services/CreateBusinessService';
@@ -42,11 +43,13 @@ class BusinessController {
 
   async create(request: Request, response: Response): Promise<Response> {
     const businessRepository = new BusinessRepository();
+    const dailyEarningsRepository = new DailyEarningsRepository();
     const pipedriveProvider = new PipedriveProvider(businessRepository);
     const blingProvider = new BlingProvider();
 
     const createBusiness = new CreateBusinessService(
       businessRepository,
+      dailyEarningsRepository,
       pipedriveProvider,
       blingProvider,
     );

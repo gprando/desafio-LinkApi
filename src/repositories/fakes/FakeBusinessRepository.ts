@@ -1,7 +1,7 @@
 import { ICreateBusinessDTO, IPaginatedBusinessDTO } from '@/dtos';
 import IPaginationDTO from '@/dtos/IPaginationDTO';
 import AppError from '@/errors/AppError';
-import Business from '@/infra/typeorm/entities/Business';
+import Business from '@/infra/typeorm/schemas/Business';
 import { ObjectID } from 'mongodb';
 import IBusinessRepository from '../IBusinessRepository';
 

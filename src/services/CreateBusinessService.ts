@@ -2,9 +2,14 @@ import IBlingProvider from '@/providers/BlingProvider/models/IBlingProvider';
 import IPipedriveProvider from '@/providers/PipedriveProvider/models/IPipedriveProvider';
 import IBusinessRepository from '@/repositories/IBusinessRepository';
 import { ICreateBusinessDTO } from '@/dtos';
+import { formatDate } from '@/utils/helpers';
+import IDailyEarningsRepository from '@/repositories/IDailyEarningsRepository';
+import { IObjectTotalPerDayToSave } from '@/dtos/ICreateOrUpdateDailyEarnings';
 
 class CreateBusinessService {
   private businessRepository: IBusinessRepository;
+
+  private dailyEarningsRepository: IDailyEarningsRepository;
 
   private pipedriveProvider: IPipedriveProvider;
 
@@ -12,18 +17,62 @@ class CreateBusinessService {
 
   constructor(
     businessRepository: IBusinessRepository,
+    dailyEarningsRepository: IDailyEarningsRepository,
     pipedriveProvider: IPipedriveProvider,
     blingProvider: IBlingProvider,
   ) {
     this.businessRepository = businessRepository;
+    this.dailyEarningsRepository = dailyEarningsRepository;
     this.pipedriveProvider = pipedriveProvider;
     this.blingProvider = blingProvider;
   }
 
   async execute(): Promise<{ message: string; status: string }> {
+    const objectTotalPerDayToSave: IObjectTotalPerDayToSave = {};
+    const objectTotalPerDaySaved: IObjectTotalPerDayToSave = {};
     const deals = await this.pipedriveProvider.listAll();
 
-    const serealizedDeals = deals.map(deal => {
+    deals.toSave.forEach(deal => {
+      const day = formatDate(new Date(deal.add_time));
+      if (Object.keys(objectTotalPerDayToSave).includes(String(day))) {
+        objectTotalPerDayToSave[`${day}`] = {
+          day,
+          total: objectTotalPerDayToSave[`${day}`].total + deal.value,
+        };
+      } else {
+        objectTotalPerDayToSave[`${day}`] = {
+          day,
+          total: deal.value,
+        };
+      }
+    });
+
+    deals.saved.forEach(deal => {
+      const day = formatDate(new Date(deal.add_time));
+      if (Object.keys(objectTotalPerDayToSave).includes(String(day))) {
+        objectTotalPerDaySaved[`${day}`] = {
+          day,
+          total:
+            objectTotalPerDaySaved[`${day}`].total +
+            objectTotalPerDayToSave[`${day}`].total,
+        };
+
+        delete objectTotalPerDayToSave[`${day}`];
+      }
+      if (Object.keys(objectTotalPerDaySaved).includes(String(day))) {
+        objectTotalPerDaySaved[`${day}`] = {
+          day,
+          total: objectTotalPerDaySaved[`${day}`].total + deal.value,
+        };
+      } else {
+        objectTotalPerDaySaved[`${day}`] = {
+          day,
+          total: deal.value,
+        };
+      }
+    });
+
+    const serealizedDeals = deals.toSave.map(deal => {
       return {
         add_time: deal.add_time,
         client_email: deal.person_id.email[0].value,
@@ -38,6 +87,11 @@ class CreateBusinessService {
         title: deal.title,
         value: deal.value,
       } as ICreateBusinessDTO;
+    });
+
+    await this.dailyEarningsRepository.createOrUpdate({
+      objectTotalPerDayToSave,
+      objectTotalPerDaySaved,
     });
 
     await this.businessRepository.create(serealizedDeals);

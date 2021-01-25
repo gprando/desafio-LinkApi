@@ -1,4 +1,4 @@
-import Business from '@/infra/typeorm/entities/Business';
+import Business from '@/infra/typeorm/schemas/Business';
 
 export default interface IPaginatedBusinessDTO {
   data: Business[];

@@ -1,5 +1,5 @@
-import IPipedriveDTO from '../dtos/IPipedriveDTO';
+import IResponsePipedrive from '../dtos/IResponsePipedrive';
 
 export default interface IPipedriveProvider {
-  listAll(): Promise<IPipedriveDTO[]>;
+  listAll(): Promise<IResponsePipedrive>;
 }
