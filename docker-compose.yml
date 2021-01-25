@@ -17,6 +17,12 @@ services:
       - PIPEDRIVE_URL=https://teste64.pipedrive.com/api/v1
       - PIPEDRIVE_TOKEN=2e724a0f6210dfef0dabf4be37b8f450d2b3fe36
       - PORT=3333
+      - NODE_ENV=dev
+      - MONGO_PORT=27017
+      - MONGO_HOST=link-api-mongo
+      - REDIS_PORT=6379
+      - REDIS_HOST=link-api-redis
+
     volumes:
       - .:/home/node/api
       - /home/node/api/node_modules
@@ -35,7 +41,13 @@ services:
       - 'mongodb_data:/bitnami/mongodb'
     networks:
       - backend-network
-
+  redis:
+    image: redis:alpine
+    container_name: link-api-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - /redisdb/conf:/usr/local/etc/redis
 volumes:
   mongodb_data:
     driver: local

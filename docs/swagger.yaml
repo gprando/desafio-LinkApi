@@ -27,6 +27,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+  /queues/integrations/new:
+    post:
+      summary: integration route
+      description: Through a queue, in the background it lists all businesses on the pipedrive, filters those with status equal to earnings, adds to the bank and bling
+      tags:
+        - business
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sucess'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
   /business/{id}:
     get:
       summary: list business data

@@ -1,4 +1,5 @@
 import AppError from '@/errors/AppError';
+import Queue from '@/infra/queue/implementation/Queue';
 import BusinessRepository from '@/infra/typeorm/repositories/BusinessRepository';
 import DailyEarningsRepository from '@/infra/typeorm/repositories/DailyEarningsRepository';
 import BlingProvider from '@/providers/BlingProvider/implementations/BlingProvider';
@@ -57,6 +58,12 @@ class BusinessController {
     const message = await createBusiness.execute();
 
     return response.json(message);
+  }
+
+  async createe(request: Request, response: Response): Promise<Response> {
+    await Queue.add('integration', {});
+
+    return response.json({ ok: true });
   }
 }
 

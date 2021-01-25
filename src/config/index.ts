@@ -20,6 +20,10 @@ interface Config {
   blingUrl: string;
   pipedriveUrl: string;
   pipedriveToken: string;
+  redis: {
+    port: number;
+    host: string;
+  };
   port: number;
 }
 
@@ -35,6 +39,11 @@ const config: Config = {
     '2e724a0f6210dfef0dabf4be37b8f450d2b3fe36') as string,
   pipedriveUrl: (parsedEnv.PIPEDRIVE_URL ||
     'https://teste64.pipedrive.com/api/v1') as string,
+
+  redis: {
+    port: (process.env.REDIS_PORT || 6379) as number,
+    host: (process.env.REDIS_HOST || 'localhost') as string,
+  },
 
   port: (parsedEnv.PORT || 3000) as number,
 };
