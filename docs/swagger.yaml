@@ -60,9 +60,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
-  /business:
+  /dailys-earnings:
     get:
-      summary: list all business paginated
+      summary: list all dailys  earnings paginated
       tags:
         - business
       parameters:
@@ -195,29 +195,9 @@ components:
             properties:
               id:
               type: string
-              code:
+              total:
                 type: number
-              creator_user_id:
-                type: string
-              creator_name:
-                type: string
-              creator_email:
-                type: string
-              client_name:
-                type: string
-              client_email:
-                type: string
-              client_phone:
-                type: string
-              title:
-                type: string
-              add_time:
-                type: string
-              value:
-                type: number
-              currency:
-                type: string
-              status:
+              day:
                 type: string
               created_at:
                 type: string

@@ -4,14 +4,14 @@ import DailyEarningsRepository from '@/infra/typeorm/repositories/DailyEarningsR
 import BlingProvider from '@/providers/BlingProvider/implementations/BlingProvider';
 import PipedriveProvider from '@/providers/PipedriveProvider/implementations/PipedriveProvider';
 import CreateBusinessService from '@/services/CreateBusinessService';
-import ListAllBusinessService from '@/services/ListAllBusinessService';
+import ListAllDailyEarningsService from '@/services/ListAllDailyEarningsService';
 import ListBusinessByIdService from '@/services/ListBusinessByIdService';
 import { Request, Response } from 'express';
 
 class BusinessController {
   async show(request: Request, response: Response): Promise<Response> {
     const businessRepository = new BusinessRepository();
-    const listAllBusinessService = new ListBusinessByIdService(
+    const listAllDailyEarnings = new ListBusinessByIdService(
       businessRepository,
     );
     const { id } = request.params;
@@ -20,20 +20,20 @@ class BusinessController {
       throw new AppError('Id is required', 401);
     }
 
-    const result = await listAllBusinessService.execute(String(id));
+    const result = await listAllDailyEarnings.execute(String(id));
 
     return response.json(result);
   }
 
   async index(request: Request, response: Response): Promise<Response> {
-    const businessRepository = new BusinessRepository();
-    const listAllBusinessService = new ListAllBusinessService(
-      businessRepository,
+    const dailyEarningsRepository = new DailyEarningsRepository();
+    const listAllDailyEarnings = new ListAllDailyEarningsService(
+      dailyEarningsRepository,
     );
 
     const { page, limit } = request.query;
 
-    const result = await listAllBusinessService.execute({
+    const result = await listAllDailyEarnings.execute({
       limit: Number(limit) || undefined,
       page: Number(page) || undefined,
     });

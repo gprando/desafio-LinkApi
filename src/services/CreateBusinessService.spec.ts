@@ -1,4 +1,3 @@
-// import AppError from '@/errors/AppError';
 import AppError from '@/errors/AppError';
 import FakeBusinessRepository from '@/repositories/fakes/FakeBusinessRepository';
 import ListBusinessByIdService from './ListBusinessByIdService';

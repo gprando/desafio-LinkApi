@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import BusinessController from './controllers/BusinessController';
+import DailyEarningsController from './controllers/DailyEarningsController';
 
 const routes = Router();
 
 const businessController = new BusinessController();
+const dailyEarningsController = new DailyEarningsController();
 
-routes.get('/', (request, response) => response.json({ ok: true }));
 routes.post('/business/integration', businessController.create);
-routes.get('/business', businessController.index);
+routes.get('/dailys-earnings', dailyEarningsController.index);
 routes.get('/business/:id', businessController.show);
 
 export default routes;

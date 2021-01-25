@@ -1,6 +1,5 @@
 import { ICreateBusinessDTO, IPaginatedBusinessDTO } from '@/dtos';
 import IPaginationDTO from '@/dtos/IPaginationDTO';
-import AppError from '@/errors/AppError';
 import Business from '@/infra/typeorm/schemas/Business';
 import { ObjectID } from 'mongodb';
 import IBusinessRepository from '../IBusinessRepository';
@@ -10,7 +9,7 @@ export default class FakeBusinessRepository implements IBusinessRepository {
 
   public async findById(id: string): Promise<Business | undefined> {
     if (!ObjectID.isValid(id)) {
-      throw new AppError('Object id inválid');
+      return undefined;
     }
     const business = this.business.find(b => String(b.id) === id);
 
