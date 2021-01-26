@@ -20,8 +20,8 @@ Desafio Back-end LinkApi
   <a aria-label="Prando" href="https://github.com/gprando/">
     <img src="https://img.shields.io/github/followers/gprando?style=social"></img>
   </a>
-    <img src="https://img.shields.io/github/last-commit/gprando/desafio-LinkApi/"></img>
-    <img src="https://img.shields.io/github/languages/count/gprando/desafio-LinkApi/"></img>
+    <img src="https://img.shields.io/github/last-commit/gprando/desafio-LinkApi"></img>
+    <img src="https://img.shields.io/github/languages/count/gprando/desafio-LinkApi"></img>
 </p>
 <p align="center">
   <a href="https://opensource.org/licenses/MIT">
