@@ -18,6 +18,4 @@ RUN yarn build
 
 EXPOSE 3333
 
-RUN yarn install --production
-
 CMD ["yarn", "start"]
