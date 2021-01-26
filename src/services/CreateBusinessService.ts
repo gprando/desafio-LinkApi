@@ -5,6 +5,7 @@ import { ICreateBusinessDTO } from '@/dtos';
 import { formatDate } from '@/utils/helpers';
 import IDailyEarningsRepository from '@/repositories/IDailyEarningsRepository';
 import { IObjectTotalPerDayToSave } from '@/dtos/ICreateOrUpdateDailyEarnings';
+import AppError from '@/errors/AppError';
 
 class CreateBusinessService {
   private businessRepository: IBusinessRepository;
@@ -58,8 +59,7 @@ class CreateBusinessService {
         };
 
         delete objectTotalPerDayToSave[`${day}`];
-      }
-      if (Object.keys(objectTotalPerDaySaved).includes(String(day))) {
+      } else if (Object.keys(objectTotalPerDaySaved).includes(String(day))) {
         objectTotalPerDaySaved[`${day}`] = {
           day,
           total: objectTotalPerDaySaved[`${day}`].total + deal.value,
@@ -89,14 +89,28 @@ class CreateBusinessService {
       } as ICreateBusinessDTO;
     });
 
-    await this.dailyEarningsRepository.createOrUpdate({
+    const createPerDayPromise = this.dailyEarningsRepository.createOrUpdate({
       objectTotalPerDayToSave,
       objectTotalPerDaySaved,
     });
 
-    await this.businessRepository.create(serealizedDeals);
+    const createBusinessPromise = this.businessRepository.create(
+      serealizedDeals,
+    );
 
-    await this.blingProvider.createBusiness(serealizedDeals);
+    const blingPromise = this.blingProvider.createBusiness(serealizedDeals);
+
+    const responses = await Promise.allSettled([
+      createPerDayPromise,
+      createBusinessPromise,
+      blingPromise,
+    ]);
+
+    responses.forEach(r => {
+      if (r.status === 'rejected') {
+        throw new AppError(`Error: ${r.reason}`);
+      }
+    });
 
     return {
       status: 'sucess',

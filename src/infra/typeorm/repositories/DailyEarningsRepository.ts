@@ -101,7 +101,7 @@ export default class DailyEarningsRepository
         if (findDaily) {
           totalPerDayCreated.push({
             ...findDaily,
-            total: findDaily.total + daily.total,
+            total: daily.total,
           });
         }
       }
